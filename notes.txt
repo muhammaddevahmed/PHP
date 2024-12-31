@@ -1,0 +1,17 @@
+Connection string to interchange data
+2 Approches
+mysqli and pdo 
+pdo is a advance approach as it can work with 12 drivers
+as for mysqli can only workwith mysqli
+mera ghar mysqli hai 
+
+constructor is a autofire 
+constructor contain data member and member function
+
+pdo Constructor required
+server,user,password (parameters value required)
+
+we use locallay here thats why we use root in user and null in password
+if we use any domain then we put user name and password which provide by domain 
+
+new keyword allocat space in memory when object is created
