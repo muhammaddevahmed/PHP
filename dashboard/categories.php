@@ -12,8 +12,40 @@ include("component/header.php")
                     class="btn btn-outline-primary m-2">Add category</button>
             </div>
         </div>
-        <div class="col-md-6 text-center">
-            <h3>This is blank page</h3>
+        <div class="col-md-12 text-center">
+            <h3>All Categories</h3>
+            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col" colspan="2">Action</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $query = $pdo->query("select * from categories");
+                                    $row = $query->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach($row as $values){
+                                    ?>    
+                                        <tr>
+                                        <th scope="row">
+                                            <img src="<?php echo $catImageAdd.$values['image']?>" width ="80" alt ="">
+                                        </th>
+                                        <td><?php echo $values['name']?></td>
+                                        <td><a href="" class="btn btn-outline-success">Edit</a></td>
+                                        <td><a href="" class="btn btn-outline-danger">Delete</a></td>
+                                        </tr>
+
+                                    <?php  
+                                    } 
+
+                                    ?>
+                                    
+                                   
+                                </tbody>
+                            </table>
         </div>
     </div>
 </div>
