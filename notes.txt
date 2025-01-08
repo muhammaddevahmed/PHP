@@ -41,3 +41,9 @@ built in method
 query: tab use karain gai fetch the whole data (like from table)
 prepare: tab use karain when we want to fetch data from one row/condition exist (where clause exist) or want to fetch single string 
 insert/delete/update/where use prepare
+
+
+categories
+product
+query
+header

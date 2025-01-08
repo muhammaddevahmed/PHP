@@ -9,11 +9,11 @@ include("component/header.php")
         <div class="row justify-content-end">
             <div class="col-lg-2 my-2">
                 <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                    class="btn btn-outline-primary ">Add category</button>
+                    class="btn btn-outline-primary ">Add Product</button>
             </div>
         </div>
         <div class="col-md-12">
-            <h3>All categories</h3>
+            <h3>All Products</h3>
             <table class="table">
                 <thead>
                     <tr>
@@ -112,28 +112,63 @@ include("component/header.php")
     </div>
 </div>
 <!-- Blank End -->
-<!--Add category Modal -->
+<!--Add product Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Categories add</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Product add</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="post" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="catName" id="exampleInputEmail1"
+                        <label for="exampleInputEmail1" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" name="pName" id="exampleInputEmail1"
                             aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Image</label>
-                        <input type="file" name="catImage" class="form-control" id="exampleInputPassword1">
+                        <label for="exampleInputEmail1" class="form-label">Product Price</label>
+                        <input type="text" class="form-control" name="pPrice" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Product Quantity</label>
+                        <input type="text" class="form-control" name="pQuantity" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Product Category</label>
+                        <select class="form-control" id="floatingSelect" name="pCatId"
+                            aria-label="Floating label select example">
+                            <option hidden selected>Open this select menu</option>
+                            <?php
+                                    $query = $pdo ->query("select * from categories");
+                                    $catRow  = $query->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach($catRow as $catVal){
+?>
+                            <option value="<?php echo $catVal['id']?>"><?php echo $catVal['name']?></option>
+                            <?php
+                                    }
+                                    ?>
+
+
+                        </select>
+
                     </div>
 
-                    <button type="submit" name="addCategory" class="btn btn-primary">Add Category</button>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Product Image</label>
+                        <input type="file" name="pImage" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Product Description</label>
+                        <textarea class="form-control" id="floatingTextarea" style="height: 150px;"
+                            name="pDescription"></textarea>
+                    </div>
+
+                    <button type="submit" name="addProduct" class="btn btn-primary">Add Product</button>
                 </form>
             </div>
 
