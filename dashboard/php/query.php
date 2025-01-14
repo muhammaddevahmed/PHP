@@ -125,4 +125,77 @@ if(isset($_POST['addProduct'])){
         
     }
 }
+
+// updateProduct
+if(isset($_POST['updateProduct'])){
+    $pid = $_POST['pId'];
+    $pName = $_POST['pName'];
+    $pPrice = $_POST['pPrice'];
+    $pQuantity = $_POST['pQuantity'];
+    $pDescription = $_POST['pDescription'];
+    $pCatId = $_POST['pCatId'];
+    if(!empty($_FILES['pImage']['name'])){
+        $pImageName = $_FILES['pImage']['name'];
+    $pTmpName = $_FILES['pImage']['tmp_name'];
+    $proPath = "img/product/".$pImageName;
+    $extension = pathinfo($pImageName,PATHINFO_EXTENSION);
+    if($extension == "jpg" ||
+    $extension == "jpeg" ||
+    $extension == "png" ||
+    $extension == "webp"
+    
+    ){
+        if(move_uploaded_file($pTmpName,$proPath)){
+            $query = $pdo ->prepare("update product set produt_name = :pn,product_price = :pp,product_quantity = :pq,product_description = :pd,product_cat_id =:pci ,product_image = :pi where product_id = :pid");
+            $query->bindParam("pid",$pid);
+            $query->bindParam("pn",$pName);
+            $query->bindParam("pp",$pPrice);
+            $query->bindParam("pq",$pQuantity);
+            $query->bindParam("pd",$pDescription);
+            $query->bindParam("pi",$pImageName);
+            $query->bindParam("pci",$pCatId);
+            $query ->execute();
+
+  echo "<script>
+        alert('product updated');
+        </script>
+    ";
+        }else{
+            echo "<script>
+            alert('invaild file address');
+            </script>";
+        }
+        }else{
+            echo "<script>
+            alert('invaild file extension');
+            </script>";
+        
+    }
+    }else{
+        $query = $pdo ->prepare("update product set produt_name = :pn,product_price = :pp,product_quantity = :pq,product_description = :pd,product_cat_id =:pci where product_id = :pid");
+        $query->bindParam("pid",$pid);
+        $query->bindParam("pn",$pName);
+        $query->bindParam("pp",$pPrice);
+        $query->bindParam("pq",$pQuantity);
+        $query->bindParam("pd",$pDescription);
+        $query->bindParam("pci",$pCatId);
+        $query ->execute();
+        echo "<script>
+        alert('product updated');
+        </script>
+    ";
+    }
+}
+// deleteProduct
+if(isset($_POST['deleteProduct'])){
+    $productid = $_POST['proId'];
+    $query = $pdo ->prepare("delete from product where product_id =:pid");
+    $query ->bindParam("pid",$productid);
+    $query->execute();
+    echo "<script>
+    alert('product deleted');
+    </script>
+";
+}
+
 ?>
