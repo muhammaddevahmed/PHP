@@ -41,7 +41,7 @@ include('php/query.php');
      <div class="form-group">
      <label for="">Email</label>
         <input
-            type="text"
+            type="email"
             name="uEmail"
             id=""
             value= "<?php echo $userEmail?>"
