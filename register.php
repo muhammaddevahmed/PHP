@@ -79,7 +79,7 @@ include('php/query.php');
         <small id="helpId" class="text-danger"><?php echo $userConfirmPasswordErr?></small>
      </div>
 
-     <button name = "addUser" class= "btn-btn-info  mt-4"> Register</button>
+     <button name = "addUser" class= "btn btn-info  mt-4"> Register</button>
 
      </form>
 
