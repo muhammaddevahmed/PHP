@@ -5,7 +5,7 @@ include('php/query.php');
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Registration Form</title>
+        <title>Login Form</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta
@@ -25,19 +25,7 @@ include('php/query.php');
     <body>
         <div class = 'container p-5'>
             <form action="" method = "post">
-     <div class="form-group">
-        <label for="">Name</label>
-        <input
-            type="text"
-            name="uName"
-            id=""
-            value= "<?php echo $userName?>"
-            class="form-control"
-            placeholder=""
-            aria-describedby="helpId"
-        />
-        <small id="helpId" class="text-danger"><?php echo $userNameErr?></small>
-     </div>
+     
      <div class="form-group">
      <label for="">Email</label>
         <input
@@ -65,21 +53,9 @@ include('php/query.php');
         <small id="helpId" class="text-danger"><?php echo $userPasswordErr?></small>
      </div>
 
-     <div class="form-group">
-     <label for="">Confirm Password</label>
-        <input
-            type="password"
-            name="uConfirmPassword"
-            id=""
-            value= "<?php echo $userConfirmPassword?>"
-            class="form-control"
-            placeholder=""
-            aria-describedby="helpId"
-        />
-        <small id="helpId" class="text-danger"><?php echo $userConfirmPasswordErr?></small>
-     </div>
+    
 
-     <button name = "addUser" class= "btn btn-info  mt-4"> Register</button>
+     <button name = "userLogin" class= "btn btn-info  mt-4">Login</button>
 
      </form>
 

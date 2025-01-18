@@ -43,7 +43,10 @@ prepare: tab use karain when we want to fetch data from one row/condition exist 
 insert/delete/update/where use prepare
 
 
-categories
-product
-query
-header
+Authentication:
+User Exist or not.
+Authorization:
+check password
+
+
+Session Variables
