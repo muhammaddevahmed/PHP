@@ -1,5 +1,6 @@
 <?php
 include('connection.php');
+session_start();
 $catImageAdd = "img/categories/";
 // addcategory
 if(isset($_POST['addCategory'])){

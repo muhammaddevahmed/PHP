@@ -1,5 +1,6 @@
 <?php
 include('dcon.php');
+session_start();
 
 $userName = $userEmail = $userPassword = $userConfirmPassword = "" ;
 $userNameErr = $userEmailErr = $userPasswordErr = $userConfirmPasswordErr = "" ;
@@ -68,19 +69,27 @@ if(isset($_POST['userLogin'])){
         $query->bindParam('uEmail',$userEmail);
         $query->execute();
         $user = $query->fetch(PDO::FETCH_ASSOC);
-        print_r($user);
+        // print_r($user);
         if($user){
             if($userPassword == $user['password']){
-                echo "<script>location.assign('login.php?success=userlogin')</script>";
+                if ($user['role_id'] == 1){
+                    $_SESSION['adminName'] = $user['name'];
+                    $_SESSION['adminEmail'] = $user['email'];
+                    $_SESSION['adminRoleID'] = $user['role_id'];
+                echo "<script>location.assign('dashboard/index.php')</script>";
             }
-            else{
-                echo "<script>location.assign('login.php?error=invalid password')</script>";
+            else if($user['role_id'] == 2){
+                $_SESSION['userName'] == $user['name'];
+                $_SESSION['userEmail'] == $user['email'];
+                $_SESSION['userRoleID'] == $user['role_id'];
+                echo "<script>location.assign('index.php')</script>";
             }
         }
         else{
             echo "<script>location.assign('login.php?error=user not found
             ')</script>"; 
         }
+    }
     }
 }
 ?>

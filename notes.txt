@@ -50,3 +50,16 @@ check password
 
 
 Session Variables
+
+Sessions:
+Http and https are state less . They don't maintain states when redirect to second page
+
+when we start session an empty file is created on server and system
+
+Definition:
+if we want to maintain variables states in server we use seesions.
+if we want to maintain variables states in website we use cookies.
+
+static keyword:
+we use to main state of files on file we use static keyword .
+
