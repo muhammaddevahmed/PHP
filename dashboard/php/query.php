@@ -80,6 +80,7 @@ if(isset($_POST['deleteCategory'])){
     ";
 }
 
+$proImageAdd = "img/product/";
 
 // add product 
 if(isset($_POST['addProduct'])){

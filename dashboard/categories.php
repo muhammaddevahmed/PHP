@@ -1,5 +1,6 @@
 <?php
-include("component/header.php")
+include('component/header.php');
+
 ?>
 
 <!-- Blank Start -->

@@ -148,8 +148,4 @@ if (!isset($_SESSION['adminEmail'])) {
                 </div>
             </nav>
             <!-- Navbar End -->
-        </div>
-    </div>
-</body>
-
-</html>
+   

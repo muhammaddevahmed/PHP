@@ -1,5 +1,5 @@
 <?php
-include('component/header.php')
+include('component/header.php');
 ?>
             <!-- Sale & Revenue Start -->
             <div class="container-fluid pt-4 px-4">
@@ -267,5 +267,5 @@ include('component/header.php')
             <!-- Widgets End -->
 
             <?php
-include('component/footer.php')
+include('component/footer.php');
 ?>
