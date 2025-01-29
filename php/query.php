@@ -79,16 +79,16 @@ if(isset($_POST['userLogin'])){
                 echo "<script>location.assign('dashboard/index.php')</script>";
             }
             else if($user['role_id'] == 2){
-                $_SESSION['userName'] == $user['name'];
-                $_SESSION['userEmail'] == $user['email'];
-                $_SESSION['userRoleID'] == $user['role_id'];
+                $_SESSION['userName'] = $user['name'];
+                $_SESSION['userEmail'] = $user['email'];
+                $_SESSION['userRoleID'] = $user['role_id'];
                 echo "<script>location.assign('index.php')</script>";
             }
         }
-        else{
-            echo "<script>location.assign('login.php?error=user not found
-            ')</script>"; 
+        else {
+            echo "<script>location.assign('login.php?error=User not found');</script>";
         }
+        
     }
     }
 }

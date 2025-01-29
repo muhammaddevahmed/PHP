@@ -54,9 +54,25 @@
 							Help & FAQs
 						</a>
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							My Account
+						<?php
+                          if(isset($_SESSION['userEmail'])){
+
+                        ?>
+
+						<a href="logout.php" class="flex-c-m p-lr-25 trans-04">
+							<?php echo $_SESSION['userName']?>
 						</a>
+
+						<?php
+						  }
+						  else{
+							?>
+						<a href="login.php" class="flex-c-m p-lr-25 trans-04">
+						Logout
+					</a>
+					<?php
+						  }
+					?>
 
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							EN
@@ -174,10 +190,25 @@
 						<a href="#" class="flex-c-m p-lr-10 trans-04">
 							Help & FAQs
 						</a>
+						<?php
+                          if(isset($_SESSION['userEmail'])){
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							My Account
+                        ?>
+
+						<a href="logout.php" class="flex-c-m p-lr-25 trans-04">
+							<?php echo $_SESSION['userName']?>
 						</a>
+
+						<?php
+						  }
+						  else{
+							?>
+						<a href="login.php" class="flex-c-m p-lr-25 trans-04">
+						Login
+					</a>
+					<?php
+						  }
+					?>
 
 						<a href="#" class="flex-c-m p-lr-10 trans-04">
 							EN
@@ -190,7 +221,7 @@
 				</li>
 			</ul>
 
-			<ul class="main-menu-m">
+			<ul class="main-menu-m ">
 				<li>
 					<a href="index.php">Home</a>
 					<ul class="sub-menu-m">
@@ -326,3 +357,5 @@
 			</div>
 		</div>
 	</div>
+
+	
