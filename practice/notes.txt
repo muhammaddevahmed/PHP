@@ -1,0 +1,11 @@
+Object in php is called associative array
+
+converting one datatype into other is called casting
+
+Maths function
+
+min()
+max()
+pi()   3.142
+round()  give(3)
+rand(1(min),100(max))   give random value
