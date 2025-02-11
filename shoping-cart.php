@@ -1,7 +1,29 @@
 <?php
 include('dashboard/php/query.php');
-
 include('components/header.php');
+?>
+<?php
+if(isset($_POST['addToCart'])){
+	if(isset($_SESSION['cart'])){
+		$count = count($_SESSION['cart']);
+        $_SESSION['cart'][$count] = array(
+			"productId" => $_POST['pId'],
+			"productName" => $_POST['pName'],
+			"productPrice" => $_POST['pPrice'],
+			"productImage" => $_POST['pImage'], // Corrected
+			"productQuantity" => $_POST['num-product'] // Corrected
+		);
+		
+		echo "<script>alert('Product Added')</script>";
+	}
+
+	else{
+		$_SESSION['cart'][0] = array("productId"=>$_POST['pId'],"productName"=>$_POST['pName'],"productPrice"=>$_POST['pPrice'],"productImage"=> $_POST['pImage'],"productQuantity"=> $_POST['num-product']);
+		echo "<script>alert('Product Added')</script>";
+	}
+}
+
+
 ?>
 		
 <!-- breadcrumb -->
@@ -15,6 +37,7 @@ include('components/header.php');
 			<span class="stext-109 cl4">
 				Shoping Cart
 			</span>
+			<a href="unset.php">unset</a>
 		</div>
 	</div>
 	<!-- Shoping Cart -->
@@ -33,14 +56,21 @@ include('components/header.php');
 									<th class="column-5">Total</th>
 								</tr>
 
+								<?php
+								if(isset($_SESSION['cart'])){
+									foreach($_SESSION['cart'] as $value){
+								
+
+								?>				
+
 								<tr class="table_row">
 									<td class="column-1">
 										<div class="how-itemcart1">
-											<img src="images/item-cart-04.jpg" alt="IMG">
+											<img src="dashboard/img/product/<?php echo $value['productImage']?>" alt="IMG">
 										</div>
 									</td>
-									<td class="column-2">Fresh Strawberries</td>
-									<td class="column-3">$ 36.00</td>
+									<td class="column-2"><?php echo $value['productName']?></td>
+									<td class="column-3"><?php echo $value['productPrice']?></td>
 									<td class="column-4">
 										<div class="wrap-num-product flex-w m-l-auto m-r-0">
 											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
@@ -54,32 +84,16 @@ include('components/header.php');
 											</div>
 										</div>
 									</td>
-									<td class="column-5">$ 36.00</td>
+									<td class="column-5"><?php echo $value['productPrice']*$value['productQuantity'] ?></td>
 								</tr>
 
-								<tr class="table_row">
-									<td class="column-1">
-										<div class="how-itemcart1">
-											<img src="images/item-cart-05.jpg" alt="IMG">
-										</div>
-									</td>
-									<td class="column-2">Lightweight Jacket</td>
-									<td class="column-3">$ 16.00</td>
-									<td class="column-4">
-										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-minus"></i>
-											</div>
+								<?php
+									}
+								}
+								
+								?>
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product2" value="1">
-
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-plus"></i>
-											</div>
-										</div>
-									</td>
-									<td class="column-5">$ 16.00</td>
-								</tr>
+								
 							</table>
 						</div>
 
