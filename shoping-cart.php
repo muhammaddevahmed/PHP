@@ -5,6 +5,11 @@ include('components/header.php');
 <?php
 if(isset($_POST['addToCart'])){
 	if(isset($_SESSION['cart'])){
+		$arrayOfProductsIds = array_column($_SESSION['cart'],"productId");
+		if(in_array($_POST['pId'],$arrayOfProductsIds)){
+			echo "<script>alert('product is already Added')</script>";
+		}
+		else {
 		$count = count($_SESSION['cart']);
         $_SESSION['cart'][$count] = array(
 			"productId" => $_POST['pId'],
@@ -15,13 +20,28 @@ if(isset($_POST['addToCart'])){
 		);
 		
 		echo "<script>alert('Product Added')</script>";
+	  }
 	}
 
 	else{
 		$_SESSION['cart'][0] = array("productId"=>$_POST['pId'],"productName"=>$_POST['pName'],"productPrice"=>$_POST['pPrice'],"productImage"=> $_POST['pImage'],"productQuantity"=> $_POST['num-product']);
 		echo "<script>alert('Product Added')</script>";
 	}
+	
 }
+//remove product from session
+
+if (isset($_GET['remove'])) {
+    $productId = $_GET['remove'];
+    foreach ($_SESSION['cart'] as $key => $value) {
+        if ($productId == $value["productId"]) {
+            unset($_SESSION['cart'][$key]);
+            $_SESSION['cart'] = array_values($_SESSION['cart']); // Reindex array
+            echo "<script>alert('Product removed successfully'); location.assign('shoping-cart.php');</script>";
+        }
+    }
+}
+
 
 
 ?>
@@ -85,6 +105,7 @@ if(isset($_POST['addToCart'])){
 										</div>
 									</td>
 									<td class="column-5"><?php echo $value['productPrice']*$value['productQuantity'] ?></td>
+									<td><a href="?remove=<?php echo $value['productId']?>" class="btn btn-danger mr-4">Remove</a></td>
 								</tr>
 
 								<?php

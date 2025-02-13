@@ -1,0 +1,6 @@
+1. restricted existing product.
+2. remove product from session.
+3. increasing and decresing the product quauntity in session.
+ 1. array-column()=>use to extract the column from array.
+   ($SESSION['cart'],"productId").
+ 2.in-array()=>use to search the product id in array.  
