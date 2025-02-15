@@ -92,14 +92,15 @@ if (isset($_GET['remove'])) {
 									<td class="column-2"><?php echo $value['productName']?></td>
 									<td class="column-3"><?php echo $value['productPrice']?></td>
 									<td class="column-4">
-										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+										<div class="wrap-num-product flex-w m-l-auto m-r-0 qtyBox">
+											<input type="hidden" class = "productId" value = "<?php echo $value['productId']?>">
+											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m dec">
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="1">
+											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="<?php echo $value['productQuantity']?>">
 
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m inc">
 												<i class="fs-16 zmdi zmdi-plus"></i>
 											</div>
 										</div>
