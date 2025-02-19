@@ -1,31 +1,46 @@
-$(document).on('click', '.inc', function() {
+$(document).on('click','.inc',function(){
     let productId = $(this).closest('.qtyBox').find('.productId').val();
-    console.log("Product ID:", productId);
-
+    console.log("Product ID : " + productId);
     let productQty = $(this).closest('.qtyBox').find('.num-product');
     let productQtyInt = parseInt(productQty.val());
+    // console.log(productQtyInt);
+    if(!isNaN(productQtyInt)){
+        let updatedQty = productQtyInt ;
+        console.log("Product Quantity : " + updatedQty);
+        updateIncDec(productId,updatedQty);
 
-    console.log("Current Quantity:", productQtyInt);
-
-    if (!isNaN(productQtyInt)) {  // ✅ Corrected NaN check
-        let updatedQty = productQtyInt + 1; // Increase quantity
-        productQty.val(updatedQty); // Update the input field
-        console.log("Updated Quantity:", updatedQty);
     }
 });
 
-$(document).on('click', '.dec', function() {
+$(document).on('click','.dec',function(){
     let productId = $(this).closest('.qtyBox').find('.productId').val();
-    console.log("Product ID:", productId);
-
+    console.log("Product ID : " + productId);
     let productQty = $(this).closest('.qtyBox').find('.num-product');
     let productQtyInt = parseInt(productQty.val());
-
-    console.log("Current Quantity:", productQtyInt);
-
-    if (!isNaN(productQtyInt) && productQtyInt > 1) {  // ✅ Prevents quantity from going below 1
-        let updatedQty = productQtyInt - 1; // Decrease quantity
-        productQty.val(updatedQty); // Update the input field
-        console.log("Updated Quantity:", updatedQty);
+    // console.log(productQtyInt);
+    if(!isNaN(productQtyInt)){
+            let updatedQty = productQtyInt ;
+            console.log("Product Quantity : " + updatedQty);
+            updateIncDec(productId,updatedQty);
     }
-});
+})
+
+function updateIncDec(proId , proQty){
+    $.ajax({
+        url: "shoping-cart.php",
+        type: "POST",
+        data:{
+        "qtyIncDec":true,
+        "productId":proId,
+        "productQty":proQty,
+       },
+       success: function(response) {
+        console.log(response);
+        
+        alert("Quantity Updated");
+        
+        
+       }
+    })
+}
+ 

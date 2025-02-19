@@ -42,6 +42,17 @@ if (isset($_GET['remove'])) {
     }
 }
 
+if (isset($_POST['qtyIncDec'])) {
+    $pId = $_POST['productId'];
+    $pQty = $_POST['productQty'];
+
+    foreach ($_SESSION['cart'] as $key => $value) {
+        if ($value['productId'] == $pId) {
+            $_SESSION['cart'][$key]['productQuantity'] = $pQty;
+        }
+    }
+}
+
 
 
 ?>
