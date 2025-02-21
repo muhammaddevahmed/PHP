@@ -51,7 +51,32 @@ if (isset($_POST['qtyIncDec'])) {
             $_SESSION['cart'][$key]['productQuantity'] = $pQty;
         }
     }
-}
+} 
+
+if(isset($_GET['checkout'])){
+	$userId = $_SESSION['userId'];
+	$userName = $_SESSION['userName'];
+	$userEmail = $_SESSION['userEmail'];
+	foreach($_SESSION['cart'] as $key => $value){
+		$productId = $value['productId'];
+		$productName = $value['productName'];
+		$productPrice = $value['productPrice'];
+		$productQuantity = $value['productQuantity'];
+		$query = $pdo->prepare('INSERT INTO orders (p_id, p_name, p_price, p_qty, u_id, u_name, u_email) VALUES (:p_id, :p_name, :p_price, :p_qty, :u_id, :u_name, :u_email)');
+
+		$query->bindParam(':p_id',$productId);
+		$query->bindParam(':p_name',$productName);
+		$query->bindParam(':p_price',$productPrice);
+		$query->bindParam(':p_qty',$productQuantity);
+		$query->bindParam(':u_id',$userId);
+		$query->bindParam(':u_name',$userName);
+		$query->bindParam(':u_email',$userEmail);
+		$query->execute();
+	}
+	unset($_SESSION['cart']);
+	echo "<script>alert('Order Placed Successfully'); location.assign('shoping-cart.php');</script>";
+	}
+
 
 
 
@@ -224,9 +249,26 @@ if (isset($_POST['qtyIncDec'])) {
 							</div>
 						</div>
 
-						<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-							Proceed to Checkout
-						</button>
+						<?php
+						if(isset($_SESSION['userEmail'])){
+							?>
+							<a href = "?checkout" class = "flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+								Proceed to Checkout
+						</a>
+						<?php
+
+						}
+						else{
+							?>
+							<a href = "login.php" class = "flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+								Proceed to Checkout
+						</a>
+						<?php
+						}
+						?>
+
+
+						
 					</div>
 				</div>
 			</div>
