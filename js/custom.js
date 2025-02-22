@@ -24,7 +24,7 @@ function updateIncDec(proId, proQty) {
         success: function (response) {
             console.log(response);
             alert("Quantity Updated");
-            location.reload(); // Reload the page to update totals
+            
         }
     });
 }
@@ -35,14 +35,3 @@ function updatePrice(element, qty) {
     totalAmount.text((price * qty).toFixed(2));
 }
 
-function validateForm() {
-    var country = document.getElementById("country").value;
-    var state = document.getElementById("state").value;
-    var postcode = document.getElementById("postcode").value;
-
-    if (country == "" || state == "" || postcode == "") {
-        alert("Please fill in all shipping details before proceeding.");
-        return false;
-    }
-    return true;
-}

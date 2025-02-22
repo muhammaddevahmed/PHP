@@ -53,13 +53,25 @@ if (isset($_POST['qtyIncDec'])) {
     }
 } 
 
-if (isset($_GET['checkout'])) {
+if (isset($_POST['checkout'])) {
+    if(empty($_POST['country']) || empty($_POST['state']) || empty($_POST['postcode']) || empty($_POST['payment_method'])) {
+        echo "<script>alert('Please fill all shipping details and select payment method.');</script>";
+     } 
+     else{
     $userId = $_SESSION['userId'];
     $userName = $_SESSION['userName'];
     $userEmail = $_SESSION['userEmail'];
+   
+           
 
     $totalAmount = 0;
     $totalQuantity = 0;
+
+            // Get shipping details
+            $country = $_POST['country'];
+            $state = $_POST['state'];
+            $postcode = $_POST['postcode'];
+            $paymentMethod = $_POST['payment_method'];
 
     foreach ($_SESSION['cart'] as $value) {
         $productId = $value['productId'];
@@ -83,21 +95,35 @@ if (isset($_GET['checkout'])) {
         $orderQuery->execute();
 
 	} 
+     // Insert into invoice with shipping details
+     $invoiceQuery = $pdo->prepare(' INSERT INTO invoice 
+     (u_id, u_name, u_email, total_amount, total_quantity, 
+     shipping_country, shipping_state, shipping_postcode, payment_method) 
+     VALUES (:u_id, :u_name, :u_email, :total_amount, :total_quantity,
+     :country, :shipping_state, :postcode, :payment_method)');
+ 
+ // Bind parameters
+ $invoiceQuery->bindParam(':u_id',$userId);
+ $invoiceQuery->bindParam(':u_name',$userName);
+ $invoiceQuery->bindParam(':u_email',$userEmail);
+ $invoiceQuery->bindParam(':total_amount',$totalAmount);
+ $invoiceQuery->bindParam(':total_quantity',$totalQuantity);
+ $invoiceQuery->bindParam(':country', $country);
+ $invoiceQuery->bindParam(':shipping_state', $state);
+ $invoiceQuery->bindParam(':postcode', $postcode);
+ $invoiceQuery->bindParam(':payment_method', $paymentMethod);
+ 
 
-    // Insert into invoice
-    $invoiceQuery = $pdo->prepare('INSERT INTO invoice (u_id, u_name, u_email, total_amount, total_quantity) VALUES (:u_id, :u_name, :u_email, :total_amount, :total_quantity)');
-    
-    $invoiceQuery->bindParam(':u_id', $userId);
-    $invoiceQuery->bindParam(':u_name', $userName);
-    $invoiceQuery->bindParam(':u_email', $userEmail);
-    $invoiceQuery->bindParam(':total_amount', $totalAmount);
-    $invoiceQuery->bindParam(':total_quantity', $totalQuantity);
-    $invoiceQuery->execute();
-
-    unset($_SESSION['cart']);
-    echo "<script>alert('Order Placed Successfully'); location.assign('shoping-cart.php');</script>";
-
+ if (!$invoiceQuery->execute()) {
+    print_r($invoiceQuery->errorInfo()); 
+    exit;
 }
+ unset($_SESSION['cart']);
+ echo "<script>alert('Order Placed Successfully'); location.assign('shoping-cart.php');</script>";
+}
+}
+
+
 
 
 
@@ -120,7 +146,7 @@ if (isset($_GET['checkout'])) {
 		</div>
 	</div>
 	<!-- Shoping Cart -->
-	<form  class="bg0 p-t-75 p-b-85">
+    <form method="POST" class="bg0 p-t-75 p-b-85">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -222,42 +248,54 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                 </span>
             </div>
         </div>
-
-        <!-- Shipping Section -->
         <div class="flex-w flex-t bor12 p-t-15 p-b-30">
-            <div class="size-208 w-full-ssm">
-                <span class="stext-110 cl2">Shipping:</span>
+    <div class="size-208 w-full-ssm">
+        <span class="stext-110 cl2">Shipping:</span>
+    </div>
+    <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
+        <div class="p-t-15">
+            <div class="bor8 bg0 m-b-12">
+                <select class="stext-111 cl8 plh3 size-111 p-lr-15" name="country" required>
+                    <option value="">Select Country</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                    <!-- Add more countries -->
+                </select>
             </div>
-            <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-                <p class="stext-111 cl6 p-t-2">
-                    There are no shipping methods available. Please double-check your address, or contact us if you need any help.
-                </p>
-                
-                <div class="p-t-15">
-                    <span class="stext-112 cl8">Calculate Shipping</span>
-                    <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-                        <select class="js-select2" name="time">
-                            <option>Select a country...</option>
-                            <option>USA</option>
-                            <option>UK</option>
-                        </select>
-                        <div class="dropDownSelect2"></div>
-                    </div>
-                    <div class="bor8 bg0 m-b-12">
-                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state" placeholder="State / Country">
-                    </div>
-                    <div class="bor8 bg0 m-b-22">
-                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode" placeholder="Postcode / Zip">
-                    </div>
-                    <div class="flex-w">
-                        <div class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">
-                            Update Totals
-                        </div>
-                    </div>
+            
+            <div class="bor8 bg0 m-b-12">
+                <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" 
+                    name="state" placeholder="State / Province" required>
+            </div>
+            
+            <div class="bor8 bg0 m-b-22">
+                <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" 
+                    name="postcode" placeholder="Postal Code" required>
+            </div>
+
+            <div class="m-b-22">
+    <span class="stext-112 cl8">Payment Method:</span>
+    <div class="flex-w flex-t p-t-15" style="display: flex; flex-direction: column;">
+        <div class="m-b-10" style="display: flex; align-items: center;">
+        <input type="radio" name="payment_method" value="Credit Card" id="credit-card" required>
+            <label class="stext-111 cl8 m-l-6 m-t-8" for="credit-card">Credit Card</label>
+            
+        </div>
+        <div class="m-b-10" style="display: flex; align-items: center;">
+        <input type="radio" name="payment_method" value="PayPal" id="paypal">
+            <label class="stext-111 cl8 m-l-6 m-t-8" for="paypal">PayPal</label>
+            
+        </div>
+        <div style="display: flex; align-items: center;">
+        <input type="radio" name="payment_method" value="Cash on Delivery" id="cod">
+            <label class="stext-111 cl8 m-l-6 m-t-8" for="cod">Cash on Delivery</label>
+            
+        </div>
                 </div>
             </div>
         </div>
-
+    </div>
+</div>
         <!-- Total Section -->
         <div class="flex-w flex-t p-t-27 p-b-33">
             <div class="size-208">
@@ -270,19 +308,19 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             </div>
         </div>
 
-        <!-- Proceed to Checkout Button -->
         <div class="flex-w flex-m p-t-25">
-            <?php if (isset($_SESSION['userEmail'])) { ?>
-                <a href="?checkout" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                    Proceed to Checkout
-                </a>
-            <?php } else { ?>
-                <a href="login.php" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                    Proceed to Checkout
-                </a>
-            <?php } 
-			?>
-        </div>
+    <?php if (isset($_SESSION['userEmail'])) { ?>
+        <button type="submit" name="checkout" 
+            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+            Proceed to Checkout
+        </button>
+    <?php } else { ?>
+        <a href="login.php" 
+            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+            Proceed to Checkout
+        </a>
+    <?php } ?>
+</div>
 
     </div>
 </div>

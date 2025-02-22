@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:8111
--- Generation Time: Feb 21, 2025 at 07:23 PM
+-- Generation Time: Feb 22, 2025 at 04:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,12 +45,40 @@ INSERT INTO `categories` (`id`, `name`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `invoice`
+--
+
+CREATE TABLE `invoice` (
+  `id` int(11) NOT NULL,
+  `u_id` int(11) NOT NULL,
+  `u_name` varchar(200) NOT NULL,
+  `u_email` varchar(200) NOT NULL,
+  `total_amount` int(11) NOT NULL,
+  `total_quantity` int(11) NOT NULL,
+  `status` varchar(200) NOT NULL DEFAULT 'pending',
+  `date_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `shipping_country` varchar(200) DEFAULT NULL,
+  `shipping_state` varchar(200) DEFAULT NULL,
+  `shipping_postcode` varchar(50) DEFAULT NULL,
+  `payment_method` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `invoice`
+--
+
+INSERT INTO `invoice` (`id`, `u_id`, `u_name`, `u_email`, `total_amount`, `total_quantity`, `status`, `date_time`, `shipping_country`, `shipping_state`, `shipping_postcode`, `payment_method`) VALUES
+(10, 11, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 730, 8, 'pending', '2025-02-22 15:17:08', 'UK', 'BA', '4667', 'PayPal'),
+(11, 11, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 340, 5, 'pending', '2025-02-22 15:32:56', 'USA', 'LA', '5688', 'Cash on Delivery');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `orders`
 --
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
-  `u_id` int(11) NOT NULL,
   `u_name` varchar(200) NOT NULL,
   `u_email` varchar(200) NOT NULL,
   `p_id` int(11) NOT NULL,
@@ -58,16 +86,19 @@ CREATE TABLE `orders` (
   `p_price` int(11) NOT NULL,
   `p_qty` int(11) NOT NULL,
   `date_time` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` varchar(200) NOT NULL DEFAULT 'pending'
+  `status` varchar(200) NOT NULL DEFAULT 'pending',
+  `u_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `u_id`, `u_name`, `u_email`, `p_id`, `p_name`, `p_price`, `p_qty`, `date_time`, `status`) VALUES
-(0, 1, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 18, 'Men 3 piece Suit', 110, 1, '2025-02-21 18:22:08', 'pending'),
-(0, 2, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 10, 'Ladies Sweater', 70, 3, '2025-02-21 18:22:08', 'pending');
+INSERT INTO `orders` (`id`, `u_name`, `u_email`, `p_id`, `p_name`, `p_price`, `p_qty`, `date_time`, `status`, `u_id`) VALUES
+(27, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 13, 'Aurum Time', 100, 3, '2025-02-22 15:17:08', 'pending', 11),
+(28, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 18, 'Men 3 piece Suit', 110, 3, '2025-02-22 15:17:08', 'pending', 11),
+(29, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 17, 'Men Casual Shirt', 50, 2, '2025-02-22 15:17:08', 'pending', 11),
+(30, 'Muhammad Ahmed', 'm.ahmed.uh72@gmail.com', 16, 'Mens Dress Pant', 68, 5, '2025-02-22 15:32:56', 'pending', 11);
 
 -- --------------------------------------------------------
 
@@ -152,10 +183,16 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `invoice`
+--
+ALTER TABLE `invoice`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`u_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `product`
@@ -188,10 +225,16 @@ ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `invoice`
+--
+ALTER TABLE `invoice`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `product`
