@@ -53,29 +53,52 @@ if (isset($_POST['qtyIncDec'])) {
     }
 } 
 
-if(isset($_GET['checkout'])){
-	$userId = $_SESSION['userId'];
-	$userName = $_SESSION['userName'];
-	$userEmail = $_SESSION['userEmail'];
-	foreach($_SESSION['cart'] as $key => $value){
-		$productId = $value['productId'];
-		$productName = $value['productName'];
-		$productPrice = $value['productPrice'];
-		$productQuantity = $value['productQuantity'];
-		$query = $pdo->prepare('INSERT INTO orders (p_id, p_name, p_price, p_qty, u_id, u_name, u_email) VALUES (:p_id, :p_name, :p_price, :p_qty, :u_id, :u_name, :u_email)');
+if (isset($_GET['checkout'])) {
+    $userId = $_SESSION['userId'];
+    $userName = $_SESSION['userName'];
+    $userEmail = $_SESSION['userEmail'];
 
-		$query->bindParam(':p_id',$productId);
-		$query->bindParam(':p_name',$productName);
-		$query->bindParam(':p_price',$productPrice);
-		$query->bindParam(':p_qty',$productQuantity);
-		$query->bindParam(':u_id',$userId);
-		$query->bindParam(':u_name',$userName);
-		$query->bindParam(':u_email',$userEmail);
-		$query->execute();
-	}
-	unset($_SESSION['cart']);
-	echo "<script>alert('Order Placed Successfully'); location.assign('shoping-cart.php');</script>";
-	}
+    $totalAmount = 0;
+    $totalQuantity = 0;
+
+    foreach ($_SESSION['cart'] as $value) {
+        $productId = $value['productId'];
+        $productName = $value['productName'];
+        $productPrice = $value['productPrice'];
+        $productQuantity = $value['productQuantity'];
+
+        $totalAmount += $productPrice * $productQuantity;
+        $totalQuantity += $productQuantity;
+
+        // Insert into orders 
+        $orderQuery = $pdo->prepare('INSERT INTO orders (p_id, p_name, p_price, p_qty, u_id, u_name, u_email) VALUES (:p_id, :p_name, :p_price, :p_qty, :u_id, :u_name, :u_email)');
+        
+        $orderQuery->bindParam(':p_id', $productId);
+        $orderQuery->bindParam(':p_name', $productName);
+        $orderQuery->bindParam(':p_price', $productPrice);
+        $orderQuery->bindParam(':p_qty', $productQuantity);
+        $orderQuery->bindParam(':u_id', $userId);
+        $orderQuery->bindParam(':u_name', $userName);
+        $orderQuery->bindParam(':u_email', $userEmail);
+        $orderQuery->execute();
+
+	} 
+
+    // Insert into invoice
+    $invoiceQuery = $pdo->prepare('INSERT INTO invoice (u_id, u_name, u_email, total_amount, total_quantity) VALUES (:u_id, :u_name, :u_email, :total_amount, :total_quantity)');
+    
+    $invoiceQuery->bindParam(':u_id', $userId);
+    $invoiceQuery->bindParam(':u_name', $userName);
+    $invoiceQuery->bindParam(':u_email', $userEmail);
+    $invoiceQuery->bindParam(':total_amount', $totalAmount);
+    $invoiceQuery->bindParam(':total_quantity', $totalQuantity);
+    $invoiceQuery->execute();
+
+    unset($_SESSION['cart']);
+    echo "<script>alert('Order Placed Successfully'); location.assign('shoping-cart.php');</script>";
+
+}
+
 
 
 
@@ -97,7 +120,7 @@ if(isset($_GET['checkout'])){
 		</div>
 	</div>
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85">
+	<form  class="bg0 p-t-75 p-b-85">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -170,109 +193,104 @@ if(isset($_GET['checkout'])){
 						</div>
 					</div>
 				</div>
+				<?php 
+$totalPrice = 0;
 
-				<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-						<h4 class="mtext-109 cl2 p-b-30">
-							Cart Totals
-						</h4>
-
-						<div class="flex-w flex-t bor12 p-b-13">
-							<div class="size-208">
-								<span class="stext-110 cl2">
-									Subtotal:
-								</span>
-							</div>
-
-							<div class="size-209">
-								<span class="mtext-110 cl2">
-									$79.65
-								</span>
-							</div>
-						</div>
-
-						<div class="flex-w flex-t bor12 p-t-15 p-b-30">
-							<div class="size-208 w-full-ssm">
-								<span class="stext-110 cl2">
-									Shipping:
-								</span>
-							</div>
-
-							<div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-								<p class="stext-111 cl6 p-t-2">
-									There are no shipping methods available. Please double check your address, or contact us if you need any help.
-								</p>
-								
-								<div class="p-t-15">
-									<span class="stext-112 cl8">
-										Calculate Shipping
-									</span>
-
-									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-										<select class="js-select2" name="time">
-											<option>Select a country...</option>
-											<option>USA</option>
-											<option>UK</option>
-										</select>
-										<div class="dropDownSelect2"></div>
-									</div>
-
-									<div class="bor8 bg0 m-b-12">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state" placeholder="State /  country">
-									</div>
-
-									<div class="bor8 bg0 m-b-22">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode" placeholder="Postcode / Zip">
-									</div>
-									
-									<div class="flex-w">
-										<div class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">
-											Update Totals
-										</div>
-									</div>
-										
-								</div>
-							</div>
-						</div>
-
-						<div class="flex-w flex-t p-t-27 p-b-33">
-							<div class="size-208">
-								<span class="mtext-101 cl2">
-									Total:
-								</span>
-							</div>
-
-							<div class="size-209 p-t-1">
-								<span class="mtext-110 cl2">
-									$79.65
-								</span>
-							</div>
-						</div>
-
-						<?php
-						if(isset($_SESSION['userEmail'])){
-							?>
-							<a href = "?checkout" class = "flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-								Proceed to Checkout
-						</a>
-						<?php
-
-						}
-						else{
-							?>
-							<a href = "login.php" class = "flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-								Proceed to Checkout
-						</a>
-						<?php
-						}
-						?>
+// Check if cart is set and is an array
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $value) {
+        $totalPrice += $value['productPrice'] * $value['productQuantity'];
+    }
+}
+?>
 
 
-						
-					</div>
-				</div>
+<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+    <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+        <h4 class="mtext-109 cl2 p-b-30">
+            Cart Totals
+        </h4>
+
+        <!-- Subtotal -->
+        <div class="flex-w flex-t bor12 p-b-13">
+            <div class="size-208">
+                <span class="stext-110 cl2">Subtotal:</span>
+            </div>
+            <div class="size-209">
+                <span class="mtext-110 cl2">
+                    $<?php echo number_format($totalPrice, 2); ?>
+                </span>
+            </div>
+        </div>
+
+        <!-- Shipping Section -->
+        <div class="flex-w flex-t bor12 p-t-15 p-b-30">
+            <div class="size-208 w-full-ssm">
+                <span class="stext-110 cl2">Shipping:</span>
+            </div>
+            <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
+                <p class="stext-111 cl6 p-t-2">
+                    There are no shipping methods available. Please double-check your address, or contact us if you need any help.
+                </p>
+                
+                <div class="p-t-15">
+                    <span class="stext-112 cl8">Calculate Shipping</span>
+                    <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+                        <select class="js-select2" name="time">
+                            <option>Select a country...</option>
+                            <option>USA</option>
+                            <option>UK</option>
+                        </select>
+                        <div class="dropDownSelect2"></div>
+                    </div>
+                    <div class="bor8 bg0 m-b-12">
+                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state" placeholder="State / Country">
+                    </div>
+                    <div class="bor8 bg0 m-b-22">
+                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode" placeholder="Postcode / Zip">
+                    </div>
+                    <div class="flex-w">
+                        <div class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">
+                            Update Totals
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Section -->
+        <div class="flex-w flex-t p-t-27 p-b-33">
+            <div class="size-208">
+                <span class="mtext-101 cl2">Total:</span>
+            </div>
+            <div class="size-209 p-t-1">
+                <span class="mtext-110 cl2">
+                    $<?php echo number_format($totalPrice, 2); ?>
+                </span>
+            </div>
+        </div>
+
+        <!-- Proceed to Checkout Button -->
+        <div class="flex-w flex-m p-t-25">
+            <?php if (isset($_SESSION['userEmail'])) { ?>
+                <a href="?checkout" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                    Proceed to Checkout
+                </a>
+            <?php } else { ?>
+                <a href="login.php" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                    Proceed to Checkout
+                </a>
+            <?php } 
+			?>
+        </div>
+
+    </div>
+</div>
 			</div>
-		</div>
+			</div>
+
+
+		
 	</form>
 		
 	

@@ -73,12 +73,14 @@ if(isset($_POST['userLogin'])){
         if($user){
             if($userPassword == $user['password']){
                 if ($user['role_id'] == 1){
+                    $_SESSION['adminId'] = $user['id'];
                     $_SESSION['adminName'] = $user['name'];
                     $_SESSION['adminEmail'] = $user['email'];
                     $_SESSION['adminRoleID'] = $user['role_id'];
                 echo "<script>location.assign('dashboard/index.php')</script>";
             }
             else if($user['role_id'] == 2){
+                $_SESSION['userId'] = $user['id'];
                 $_SESSION['userName'] = $user['name'];
                 $_SESSION['userEmail'] = $user['email'];
                 $_SESSION['userRoleID'] = $user['role_id'];

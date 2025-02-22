@@ -34,3 +34,15 @@ function updatePrice(element, qty) {
     let totalAmount = element.closest('.table_row').find('.column-5');
     totalAmount.text((price * qty).toFixed(2));
 }
+
+function validateForm() {
+    var country = document.getElementById("country").value;
+    var state = document.getElementById("state").value;
+    var postcode = document.getElementById("postcode").value;
+
+    if (country == "" || state == "" || postcode == "") {
+        alert("Please fill in all shipping details before proceeding.");
+        return false;
+    }
+    return true;
+}
